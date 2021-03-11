@@ -25,16 +25,22 @@ class Amdfftw(FftwBase):
 
     _name = 'amdfftw'
     homepage = "https://developer.amd.com/amd-aocl/fftw/"
-    url = "https://github.com/amd/amd-fftw/archive/2.2.tar.gz"
     git = "https://github.com/amd/amd-fftw.git"
 
     maintainers = ['amd-toolchain-support']
 
+    version('3.0', sha256='8dda7a6e440e5c94ffc318c6cd8656e2e9cf8ccc628893be0b46a65ff0d1faac')
     version('2.2', sha256='de9d777236fb290c335860b458131678f75aa0799c641490c644c843f0e246f8')
 
     variant('shared', default=True, description='Builds a shared version of the library')
     variant('openmp', default=True, description="Enable OpenMP support")
     variant('debug', default=False, description='Builds a debug version of the library')
+
+    def url_for_version(self, version):
+        if version == Version('3.0'):
+            return "http://aocl.amd.com/data/spack/fftw/3.0.tar.gz"
+        else:
+            return "https://github.com/amd/amd-fftw/archive/2.2.tar.gz"
 
     depends_on('texinfo')
 
