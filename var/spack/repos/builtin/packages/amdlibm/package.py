@@ -25,9 +25,7 @@ class Amdlibm(SConsPackage):
     # To install amdlibm from latest master branch:
     # spack install amdlibm ^amdlibm@master
     version("3.0", branch="aocl-3.0")
-    version("2.2",
-            commit="4033e022da428125747e118ccd6fdd9cee21c470",
-            preferred=True)
+    version("2.2", commit="4033e022da428125747e118ccd6fdd9cee21c470")
 
     variant("verbose", default=False,
             description="Building with verbosity")
@@ -39,7 +37,6 @@ class Amdlibm(SConsPackage):
 
     patch("0001-libm-ose-Scripts-cleanup-pyc-files.patch", when="@2.2")
     patch("0002-libm-ose-prevent-log-v3.c-from-building.patch", when="@2.2")
-    patch("0001-libm-spcack-fixes-cc-cxx-prefix-install-lib-inc.patch", when="@3.0")
 
     conflicts("%gcc@:9.1.999", msg="Minimum required GCC version is 9.2.0")
 
