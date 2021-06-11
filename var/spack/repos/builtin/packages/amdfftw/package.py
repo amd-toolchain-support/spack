@@ -80,6 +80,16 @@ class Amdfftw(FftwBase):
         msg="amd-fast-planner doesn't support long_double precision")
     conflicts('+amd-top-n-planner', when="@:3.0.0",
               msg="amd-top-n-planner is supported from 3.0.1 onwards")
+    conflicts(
+        '+amd-top-n-planner',
+        when='precision=long_double',
+        msg="amd-top-n-planner doesn't support long_double precision")
+    conflicts(
+        '+amd-top-n-planner',
+        when='precision=quad',
+        msg="amd-top-n-planner doesn't support quad precision")
+    conflicts('+amd-top-n-planner', when='+amd-fast-planner',
+              msg="amd-top-n-planner cannot be used with amd-fast-planner")
     conflicts('+amd-top-n-planner', when='+threads',
               msg="amd-top-n-planner works only for single thread")
     conflicts('+amd-top-n-planner', when='+mpi',
