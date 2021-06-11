@@ -25,13 +25,19 @@ class Amdfftw(FftwBase):
 
     _name = 'amdfftw'
     homepage = "https://developer.amd.com/amd-aocl/fftw/"
-    url = "https://github.com/amd/amd-fftw/archive/3.0.tar.gz"
     git = "https://github.com/amd/amd-fftw.git"
 
     maintainers = ['amd-toolchain-support']
 
+    version('3.0.1', sha256='74aa362a45f51b856dc30621cb183cfbd27e2d5cc649fcf7b522eb0700871399')
     version('3.0', sha256='a69deaf45478a59a69f77c4f7e9872967f1cfe996592dd12beb6318f18ea0bcd')
     version('2.2', sha256='de9d777236fb290c335860b458131678f75aa0799c641490c644c843f0e246f8')
+
+    def url_for_version(self, version):
+        if version == Version('3.0.1'):
+            return "http://aocl.amd.com/data/spack/fftw/3.0.1.tar.gz"
+        else:
+            return "https://github.com/amd/amd-fftw/archive/3.0.tar.gz"
 
     variant('shared', default=True, description="Builds a shared version of the library")
     variant('openmp', default=True, description="Enable OpenMP support")
@@ -43,15 +49,27 @@ class Amdfftw(FftwBase):
         description="Option to reduce the planning time without much"
                     "tradeoff in the performance. It is supported for"
                     "Float and double precisions only.")
+    variant(
+        'amd-top-n-planner',
+        default=False,
+        description="Build with amd-top-n-planner support")
+    variant(
+        'amd-mpi-vader-limit',
+        default=False,
+        description="Build with amd-mpi-vader-limit support")
 
     depends_on('texinfo')
 
     provides('fftw-api@3', when='@2:')
 
-    conflicts('precision=quad', when='@2.2 %aocc', msg="AOCC clang doesn't support quad precision")
-    conflicts('+debug', when='@2.2 %aocc', msg="AOCC clang doesn't support debug")
-    conflicts('%gcc@:7.2', when="@2.2:", msg="Required GCC version above 7.2 for AMDFFTW")
-    conflicts('+amd-fast-planner', when="@2.2", msg="amd-fast-planner is supported from 3.0 onwards")
+    conflicts('precision=quad', when='@2.2 %aocc',
+              msg="AOCC clang doesn't support quad precision")
+    conflicts('+debug', when='@2.2 %aocc',
+              msg="AOCC clang doesn't support debug")
+    conflicts('%gcc@:7.2', when="@2.2:",
+              msg="Required GCC version above 7.2 for AMDFFTW")
+    conflicts('+amd-fast-planner', when="@2.2",
+              msg="amd-fast-planner is supported from 3.0 onwards")
     conflicts(
         '+amd-fast-planner',
         when='precision=quad',
@@ -60,6 +78,16 @@ class Amdfftw(FftwBase):
         '+amd-fast-planner',
         when='precision=long_double',
         msg="amd-fast-planner doesn't support long_double precision")
+    conflicts('+amd-top-n-planner', when="@:3.0.0",
+              msg="amd-top-n-planner is supported from 3.0.1 onwards")
+    conflicts('+amd-top-n-planner', when='+threads',
+              msg="amd-top-n-planner works only for single thread")
+    conflicts('+amd-top-n-planner', when='+mpi',
+              msg="amd-top-n-planner is not supported for mpi thread")
+    conflicts('+amd-top-n-planner', when='+openmp',
+              msg="amd-top-n-planner is not supported for openmp thread")
+    conflicts('+amd-mpi-vader-limit', when="@:3.0.0",
+              msg="amd-mpi-vader-limit is supported from 3.0.1 onwards")
 
     def configure(self, spec, prefix):
         """Configure function"""
@@ -104,6 +132,16 @@ class Amdfftw(FftwBase):
             options.append('--enable-amd-fast-planner')
         else:
             options.append('--disable-amd-fast-planner')
+
+        if '+amd-top-n-planner' in spec:
+            options.append('--enable-amd-top-n-planner')
+        else:
+            options.append('--disable-amd-top-n-planner')
+
+        if '+amd-mpi-vader-limit' in spec:
+            options.append('--enable-amd-mpi-vader-limit')
+        else:
+            options.append('--disable-amd-mpi-vader-limit')
 
         if not self.compiler.f77 or not self.compiler.fc:
             options.append("--disable-fortran")

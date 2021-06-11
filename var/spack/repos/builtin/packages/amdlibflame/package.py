@@ -31,13 +31,24 @@ class Amdlibflame(LibflameBase):
 
     _name = 'amdlibflame'
     homepage = "http://developer.amd.com/amd-cpu-libraries/blas-library/#libflame"
-    url = "https://github.com/amd/libflame/archive/3.0.tar.gz"
     git = "https://github.com/amd/libflame.git"
 
     maintainers = ['amd-toolchain-support']
 
+    version('3.0.1', sha256='0db7cf644394aa6a2e793b6bad2ad771846a7189609f18c02075494e83baad7c')
     version('3.0', sha256='d94e08b688539748571e6d4c1ec1ce42732eac18bd75de989234983c33f01ced')
     version('2.2', sha256='12b9c1f92d2c2fa637305aaa15cf706652406f210eaa5cbc17aaea9fcfa576dc')
+
+    variant('ilp64', default=False, description='Build with ILP64 support')
+
+    conflicts('+ilp64', when="@:3.0.0",
+              msg="ILP64 is supported from 3.0.1 onwards")
+
+    def url_for_version(self, version):
+        if version == Version('3.0.1'):
+            return "http://aocl.amd.com/data/spack/libflame/3.0.1.tar.gz"
+        else:
+            return "https://github.com/amd/libflame/archive/3.0.tar.gz"
 
     patch('aocc-2.2.0.patch', when="@:2.999", level=1)
 
@@ -60,6 +71,9 @@ class Amdlibflame(LibflameBase):
         complex types when compiling with aocc flang"""
         if "@3.0: %aocc" in self.spec:
             args.append("--enable-f2c-dotc")
+
+        if "@3.0.1: +ilp64" in self.spec:
+            args.append("--enable-ILP64")
 
         return args
 
