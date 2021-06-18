@@ -42,7 +42,7 @@ class Amdblis(BlisBase):
         args = super(Amdblis, self).configure_args()
 
         if spec.satisfies('@3.0.1: +ilp64'):
-                args.append('--blas-in-size=64')
+                args.append('--blas-int-size=64')
 
         if spec.satisfies('%aocc'):
             """ To enabled Fortran to C calling convention for
