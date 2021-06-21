@@ -30,7 +30,6 @@ class Amdblis(BlisBase):
     conflicts('+ilp64', when="@:3.0.0",
               msg="ILP64 is supported from 3.0.1 onwards")
 
-
     def url_for_version(self, version):
         if version == Version('3.0.1'):
             return "http://aocl.amd.com/data/spack/blis/3.0.1.tar.gz"
@@ -42,7 +41,7 @@ class Amdblis(BlisBase):
         args = super(Amdblis, self).configure_args()
 
         if spec.satisfies('@3.0.1: +ilp64'):
-                args.append('--blas-int-size=64')
+            args.append('--blas-int-size=64')
 
         if spec.satisfies('%aocc'):
             """ To enabled Fortran to C calling convention for

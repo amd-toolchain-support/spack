@@ -39,10 +39,14 @@ class Amdfftw(FftwBase):
         else:
             return "https://github.com/amd/amd-fftw/archive/3.0.tar.gz"
 
-    variant('shared', default=True, description="Builds a shared version of the library")
-    variant('openmp', default=True, description="Enable OpenMP support")
-    variant('threads', default=False, description="Enable SMP threads support")
-    variant('debug', default=False, description="Builds a debug version of the library")
+    variant('shared', default=True,
+            description="Builds a shared version of the library")
+    variant('openmp', default=True,
+            description="Enable OpenMP support")
+    variant('threads', default=False,
+            description="Enable SMP threads support")
+    variant('debug', default=False,
+            description="Builds a debug version of the library")
     variant(
         'amd-fast-planner',
         default=False,
@@ -57,6 +61,14 @@ class Amdfftw(FftwBase):
         'amd-mpi-vader-limit',
         default=False,
         description="Build with amd-mpi-vader-limit support")
+    variant(
+        'static',
+        default=False,
+        description="Build with static suppport")
+    variant(
+        'amd-trans',
+        default=False,
+        description="Build with amd-trans suppport")
 
     depends_on('texinfo')
 
@@ -98,6 +110,20 @@ class Amdfftw(FftwBase):
               msg="amd-top-n-planner is not supported for openmp thread")
     conflicts('+amd-mpi-vader-limit', when="@:3.0.0",
               msg="amd-mpi-vader-limit is supported from 3.0.1 onwards")
+    conflicts('+amd-trans', when='+threads',
+              msg="amd-trans works only for single thread")
+    conflicts('+amd-trans', when='+mpi',
+              msg="amd-trans is not supported for mpi thread")
+    conflicts('+amd-trans', when='+openmp',
+              msg="amd-trans is not supported for openmp thread")
+    conflicts(
+        '+amd-trans',
+        when='precision=long_double',
+        msg="amd-trans doesn't support long_double precision")
+    conflicts(
+        '+amd-trans',
+        when='precision=quad',
+        msg="amd-trans doesn't support quad precision")
 
     def configure(self, spec, prefix):
         """Configure function"""
@@ -152,6 +178,16 @@ class Amdfftw(FftwBase):
             options.append('--enable-amd-mpi-vader-limit')
         else:
             options.append('--disable-amd-mpi-vader-limit')
+
+        if '+static' in spec:
+            options.append('--enable-static')
+        else:
+            options.append('--disable-static')
+
+        if '+amd-trans' in spec:
+            options.append('--enable-amd-trans')
+        else:
+            options.append('--disable-amd-trans')
 
         if not self.compiler.f77 or not self.compiler.fc:
             options.append("--disable-fortran")
