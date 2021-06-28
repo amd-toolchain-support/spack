@@ -35,7 +35,7 @@ class Amdlibflame(LibflameBase):
 
     maintainers = ['amd-toolchain-support']
 
-    version('3.0.1', sha256='2d65eb496c6c7930bc291a53094e675f426e6f95797c96109706b4faac71c7b5')
+    version('3.0.1', sha256='b2fbe4cc3009b114b7c9b80a1759fefbfb12a7b1b5751a7f377e4f39d6ace679')
     version('3.0', sha256='d94e08b688539748571e6d4c1ec1ce42732eac18bd75de989234983c33f01ced')
     version('2.2', sha256='12b9c1f92d2c2fa637305aaa15cf706652406f210eaa5cbc17aaea9fcfa576dc')
 
