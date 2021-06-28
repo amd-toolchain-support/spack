@@ -21,7 +21,7 @@ class Amdblis(BlisBase):
 
     maintainers = ['amd-toolchain-support']
 
-    version('3.0.1', sha256='33469d8f334e571a2bccb444d55ac11ca9dcd4a01579d1291efef79bc7f14489')
+    version('3.0.1', sha256='31a71cc595da4929cbf30a8d53814a56f77632699a80f1dfcb5818d8d9214e1a')
     version('3.0', sha256='ac848c040cd6c3550fe49148dbdf109216cad72d3235763ee7ee8134e1528517')
     version('2.2', sha256='e1feb60ac919cf6d233c43c424f6a8a11eab2c62c2c6e3f2652c15ee9063c0c9')
 
