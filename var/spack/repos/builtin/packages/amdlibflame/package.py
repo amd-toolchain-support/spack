@@ -51,6 +51,7 @@ class Amdlibflame(LibflameBase):
             return "https://github.com/amd/libflame/archive/3.0.tar.gz"
 
     patch('aocc-2.2.0.patch', when="@:2.999", level=1)
+    patch('cray-compiler-wrapper.patch')
 
     provides('flame@5.2', when='@2:')
 
