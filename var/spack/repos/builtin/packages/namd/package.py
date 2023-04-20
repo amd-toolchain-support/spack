@@ -13,6 +13,7 @@ from spack.package import *
 
 
 class Namd(MakefilePackage, CudaPackage):
+
     """NAMD is a parallel molecular dynamics code designed for
     high-performance simulation of large biomolecular systems."""
 
@@ -33,7 +34,6 @@ class Namd(MakefilePackage, CudaPackage):
         preferred=True,
     )
     version("2.13", md5="9e3323ed856e36e34d5c17a7b0341e38")
-    version("2.12", md5="2a1191909b1ab03bf0205971ad4d8ee9")
 
     variant(
         "fftw",
