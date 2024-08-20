@@ -88,7 +88,7 @@ jobs:
           fi
 
       - name: Upload Dockerfile
-        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808
+        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a
         with:
           name: dockerfiles_${{ matrix.dockerfile[0] }}
           path: dockerfiles
@@ -127,7 +127,7 @@ jobs:
     needs: deploy-images
     steps:
       - name: Merge Artifacts
-        uses: actions/upload-artifact/merge@65462800fd760344b1a7b4382951275a0abb4808
+        uses: actions/upload-artifact/merge@834a144ee995460fba8ed112a2fc961b36a5ec5a
         with:
           name: dockerfiles
           pattern: dockerfiles_*
