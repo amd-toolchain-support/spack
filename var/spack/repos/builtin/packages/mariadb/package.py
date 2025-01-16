@@ -80,6 +80,13 @@ class Mariadb(CMakePackage):
         when="@10.2.8:10.4.12",
     )
 
+    # patch for clang build issue: https://github.com/MariaDB/server/pull/2983
+    patch(
+        "https://github.com/MariaDB/server/commit/392b97eaa61fdb34e784aa1fc681313be02768bc.patch?full_index=1",
+        sha256="c90288458c4ce16cef04eff09d96639ad336120bfcca7333c5625185b9a73465",
+        when="@10.9.6:",
+    )
+
     def cmake_args(self):
         args = []
 
